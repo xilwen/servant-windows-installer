@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>AskToIntallPane.qml</file>
+        <file>IfNoVBoxPane.qml</file>
+        <file>InstallSucceed.qml</file>
+        <file>LoadingPane.qml</file>
+    </qresource>
+</RCC>
