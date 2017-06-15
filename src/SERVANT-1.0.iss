@@ -30,13 +30,13 @@ DisableReadyMemo=yes
 DisableStartupPrompt=yes
 ;
 DefaultDirName={sd}\Users\{username}\{#MyAppName}
-;LicenseFile=D:\Dillon\SERVANT\InnoSetup\ServantLicense_Lisence.txt
-;InfoBeforeFile=D:\Dillon\SERVANT\InnoSetup\ServantLicense_BeforeInstall.txt
-;InfoAfterFile=D:\Dillon\SERVANT\InnoSetup\ServantLicense_AfterInstall.txt
+;LicenseFile=.\ServantLicense_Lisence.txt
+;InfoBeforeFile=.\ServantLicense_BeforeInstall.txt
+;InfoAfterFile=.\ServantLicense_AfterInstall.txt
 OutputDir=.\setup
-OutputBaseFilename=setup
+OutputBaseFilename=SERVANTInstall
 SetupIconFile=.\SERVANT.ico
-Compression=lzma
+Compression=lzma2/max
 SolidCompression=yes
 WizardImageFile=.\WalcomePage-SERVANT.bmp
 WizardSmallImageFile=.\WizardSmallImageFile-1.bmp
@@ -98,10 +98,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 ;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\Dillon\SERVANT\InnoSetup\servant-manager-gui.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Dillon\SERVANT\InnoSetup\vboxWrapper.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Dillon\SERVANT\InnoSetup\VirtualBox-5.1.22-115126-Win.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: IfNotVboxInstalled
-Source: "D:\Dillon\SERVANT\InnoSetup\SERVANT.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\servant-manager-gui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\vboxWrapper.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\VirtualBox-5.1.22-115126-Win.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: IfNotVboxInstalled
+Source: ".\SERVANT.ico"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
