@@ -1,1 +1,3 @@
 *.exe
+src/servant-manager-gui
+src/setup

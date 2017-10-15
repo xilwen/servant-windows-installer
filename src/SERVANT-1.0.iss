@@ -98,9 +98,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 ;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: ".\servant-manager-gui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\servant-manager-gui\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 Source: ".\vboxWrapper.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\VirtualBox-5.1.22-115126-Win.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: IfNotVboxInstalled
+Source: ".\VirtualBox-5.1.28-117968-Win.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: IfNotVboxInstalled
 Source: ".\SERVANT.ico"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -110,7 +110,7 @@ Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilen
 ;Name: "{commonstartup}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "SetupIconFile"
 
 [Run]
-Filename: "{app}\VirtualBox-5.1.22-115126-Win.exe"; Flags: waituntilterminated; Check: IfNotVboxInstalled
+Filename: "{app}\VirtualBox-5.1.28-117968-Win.exe"; Flags: waituntilterminated; Check: IfNotVboxInstalled
 Filename: "{app}\vboxWrapper.exe"; Parameters: " -install"; Flags: waituntilterminated runhidden
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
