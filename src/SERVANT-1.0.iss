@@ -6,6 +6,7 @@
 #define MyAppPublisher "SERVANT, Inc."
 #define MyAppURL "http://www.servant.com/"
 #define MyAppExeName "servant-manager-gui.exe"
+#include <idp.iss>
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -30,9 +31,6 @@ DisableReadyMemo=yes
 DisableStartupPrompt=yes
 ;
 DefaultDirName={sd}\Users\{username}\{#MyAppName}
-;LicenseFile=.\ServantLicense_Lisence.txt
-;InfoBeforeFile=.\ServantLicense_BeforeInstall.txt
-;InfoAfterFile=.\ServantLicense_AfterInstall.txt
 OutputDir=.\setup
 OutputBaseFilename=SERVANTInstall
 SetupIconFile=.\SERVANT.ico
@@ -86,31 +84,22 @@ UninstalledAll=%1 已經成功從您的電腦中移除。
 WizardReady=準備安裝
 
 [CustomMessages]
-
 LaunchProgram=執行 %1
-
-
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
-;[Tasks]
-;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-
 [Files]
 Source: ".\servant-manager-gui\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 Source: ".\vboxWrapper.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\VirtualBox-5.1.28-117968-Win.exe"; DestDir: "{app}"; Flags: ignoreversion; Check: IfNotVboxInstalled
 Source: ".\SERVANT.ico"; DestDir: "{app}"; Flags: ignoreversion
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
 Name: "{userprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\SERVANT.ico"
 Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\SERVANT.ico"
-;Name: "{commonstartup}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "SetupIconFile"
 
 [Run]
-Filename: "{app}\VirtualBox-5.1.28-117968-Win.exe"; Flags: waituntilterminated; Check: IfNotVboxInstalled
+Filename: "{tmp}\VirtualBox-5.2.0-118431-Win.exe"; Flags: waituntilterminated; Check: IfNotVboxInstalled
 Filename: "{app}\vboxWrapper.exe"; Parameters: " -install"; Flags: waituntilterminated runhidden
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
@@ -118,6 +107,18 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 Filename: "{app}\vboxWrapper.exe"; Parameters: " -remove"; Flags: runhidden
 
 [Code]
+function IfNotVboxInstalled: Boolean;
+begin
+  if IsWin64() then begin
+    Result := RegKeyExists(HKLM64, 'SOFTWARE\Oracle\VirtualBox');
+    if not Result then begin
+      Result := RegKeyExists(HKLM32, 'SOFTWARE\\Oracle\\VirtualBox');
+    end;
+  end else begin
+    Result := RegKeyExists(HKLM32, 'SOFTWARE\\Oracle\\VirtualBox');
+  end;
+  Result := not Result;
+end;
 
 procedure InitializeWizard;
 var
@@ -137,28 +138,16 @@ begin
   RichViewer.RTFText :=
     '{\rtf1 將會在您的使用者家目錄下安裝 SERVANT 。' + 
     '\par SERVANT 需要使用 Virtualbox 。' +
-    '\par 若您的電腦沒有安裝 Oracle Virtualbox 5.0 以上版本，安裝時將會帶領您安裝 Oracle Virtualbox 。' +
+    '\par 若電腦中沒有安裝 Oracle Virtualbox 5.0 以上版本，安裝時將會下載並執行 Oracle Virtualbox 安裝程式。' +
     '\par \par 繼續安裝代表您同意 ' +
     '{\b {\field{\*\fldinst{HYPERLINK "https://github.com/xilwen/servant-manager-gui/blob/master/LICENSE" }}' + 
     '{\fldrslt{授權合約}}}} ' +
     '。}';
-end;
 
-function IfNotVboxInstalled: Boolean;
-begin
-  if IsWin64() then begin
-    Result := RegKeyExists(HKLM64, 'SOFTWARE\Oracle\VirtualBox');
-      //if Result then MsgBox('VBox 64 Yes', mbError, MB_OK)
-      //else MsgBox('VBox 64 No', mbError, MB_OK);
-      
-    if not Result then begin
-      Result := RegKeyExists(HKLM32, 'SOFTWARE\\Oracle\\VirtualBox');
-    end;
-  end else begin
-    Result := RegKeyExists(HKLM32, 'SOFTWARE\\Oracle\\VirtualBox');
+  if IfNotVboxInstalled then begin
+    idpAddFile('http://download.virtualbox.org/virtualbox/5.2.0/VirtualBox-5.2.0-118431-Win.exe', ExpandConstant('{tmp}\VirtualBox-5.2.0-118431-Win.exe'));
+    idpDownloadAfter(wpWelcome);
   end;
-    //if Result then MsgBox('VBox 32 Yes', mbError, MB_OK)
-    //else MsgBox('VBox 32 No', mbError, MB_OK);
-
-  Result := not Result;
 end;
+
+
